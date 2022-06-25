@@ -8,7 +8,7 @@ plugins {
 
 defaultTasks("clean", "test", "aggregate")
 
-group = "org.example"
+group = "org.zing"
 version = "1.0-SNAPSHOT"
 
 val serenityCoreVersion = "3.2.5"
