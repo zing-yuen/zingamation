@@ -5,8 +5,8 @@ import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.GivenWhenThen.*
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
+import net.serenitybdd.screenplay.actions.Open
 import net.serenitybdd.screenplay.ensure.that
-import net.serenitybdd.screenplay.ensure.web.ElementLocated
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation
 import net.serenitybdd.screenplay.targets.Target.the
 import net.thucydides.core.annotations.Managed
@@ -16,6 +16,7 @@ import org.auto.zing.exceptions.TitleIsNotVisibleException.Companion.RESULT_TITL
 import org.auto.zing.questions.GoogleSearchResult
 import org.auto.zing.tasks.Navigate
 import org.auto.zing.user_interfaces.GoogleHomePage
+import org.auto.zing.user_interfaces.MyPages
 import org.hamcrest.Matchers.hasToString
 import org.joda.time.ReadableDateTime
 import org.junit.Before
@@ -101,6 +102,7 @@ class MyTest {
     }
 
     @Test
+    @WithTag("collection")
     fun testWithCollections() {
         val colors = listOf("red", "green", "blue")
         val sameColors = listOf("red", "green", "blue")
@@ -148,19 +150,27 @@ class MyTest {
     }
 
     // target for demo purposes, does not work
+    @WithTag("smoketest")
     @Test
     fun testWithWebElements() {
-        val FIRST_NAME = the("First name field").locatedBy("#firstName")
+
+        val myPages = MyPages()
 
         user1.attemptsTo(
-            that(FIRST_NAME).value().isEqualTo("Joe"),
-            that(ElementLocated.by("#firstName")).isDisabled(),
-            that(ElementLocated.by("#firstName")).isEnabled(),
-            that(ElementLocated.by("#firstName")).isDisabled()
+            Open.browserOn(myPages)
+        )
+
+        val FIRST_NAME = the("First name field").locatedBy("#firstName")
+//            .resolveFor(user1).text
+        user1.attemptsTo(
+            that(FIRST_NAME).textContent().isEqualTo("Zing"),
+//            that(ElementLocated.by("#firstName")).isDisabled(),
+//            that(ElementLocated.by("#firstName")).isEnabled(),
+//            that(ElementLocated.by("#firstName")).isDisabled()
         )
 
         // checking text content and field values
-        val SEARCH_RESULTS_SUMMARY = the("Search Results Summary").locatedBy("searchResultHeader")
+      /*  val SEARCH_RESULTS_SUMMARY = the("Search Results Summary").locatedBy("searchResultHeader")
         user1.attemptsTo(
             that(SEARCH_RESULTS_SUMMARY)
                 .text() // text of the element
@@ -171,7 +181,7 @@ class MyTest {
             that(SEARCH_RESULTS_SUMMARY)
                 .selectedValue()
                 .isEqualTo("")
-        )
+        )*/
     }
 
     private fun isAPrimaryColor(color: String): Boolean {

@@ -24,6 +24,10 @@ repositories {
     mavenLocal()
 }
 
+serenity {
+    this.reports = listOf("single-page-html")
+}
+
 dependencies {
     implementation("net.serenity-bdd:serenity-core:${serenityCoreVersion}")
     implementation("net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}")
@@ -40,6 +44,10 @@ dependencies {
 }
 
 println("This is executed druing the configuration phase.")
+
+testing {
+    println(this.suites)
+}
 
 tasks.register("configured") {
     println("registered configured task")
@@ -107,16 +115,37 @@ fun fileList(dir: String): List<File>? = file(dir).listFiles { file: File -> fil
 //    }
 //}
 
-//task("copyPropsFile") {
-//    if (!project.hasProperty("environment")) {
+//tasks.register("copyPropsFile") {
+//    if (!this.project.hasProperty("environment")) {
 //        ext.set("environment", "dev")
 //    }
 //    copy {
-//        from("../conf/" + ext.get("environment") + "/properties/serenity.properties", projectDir )
+//        from(projectDir + "../conf/" + ext.get("environment") + "/properties/serenity.properties", projectDir )
 //    }
 //
-//    if (project.hasProperty("tags")) {
-//        println("JUnit tags set to")
+//    doLast {
+//        if (project.hasProperty("tags")) {
+//            println("JUnit tags set to: ${this.project.property("tags")}");
+
+//            ant.invokeMethod("PropertyFile", mapOf(
+//                "file" to "${this.project.projectDir}/serenity.properties"
+//            ))
+//            {
+//                ant.invokeMethod("entry", mapOf(
+//                    "key" to "tags",
+//                    "value" to "${this.project.property("tags")}"
+//                ))
+//            }
+
+//            ant.propertyfile(file("${this.project.projectDir}/serenity.properties")) {
+//                entry(key("tags"), value("${this.project.property("tags")}"))
+//            }
+//        }
 //    }
+
 //}
 
+//tasks.withType<ProcessResources> {
+//    dependsOn("copyPropsFile")
+//    copyPropsFile.execute()
+//}
