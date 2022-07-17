@@ -45,10 +45,6 @@ dependencies {
 
 println("This is executed druing the configuration phase.")
 
-testing {
-    println(this.suites)
-}
-
 tasks.register("configured") {
     println("registered configured task")
     repeat(4) { print("$it ")}

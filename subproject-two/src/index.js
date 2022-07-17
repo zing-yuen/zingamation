@@ -3,12 +3,42 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  BrowserRouter, Route, Routes
+} from 'react-router-dom';
+import CustomerMain from './components/Customers/CustomerMain';
+import Customer from './components/Customers/Customer';
+import OrganisationMain from './components/Organisation/OrganisationMain';
+
 
 console.log("Start index.js")
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="customers" element={<CustomerMain />}>
+            <Route
+              index
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>Select an invoice</p>
+                </main>
+              }
+            />
+            <Route path=":customerId" element={<Customer />} />
+          </Route>
+          <Route path="/organisations" element={<OrganisationMain />} />
+        </Route>
+        <Route path="*" element={
+          <main style={{ padding: "1rem" }}>
+            <p>There's nothing here</p>
+          </main>
+        } />
+      </Routes>
+    </BrowserRouter>
+
   </React.StrictMode>
 );
 
